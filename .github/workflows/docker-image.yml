@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag my-static-image-name
 
     - name: Run Docker container on port 5001
-      run: docker run -d -p 5001:5001 my-image-name:$(date +%s)
+      run: docker run -d -p 5001:5001 my-static-image-name
