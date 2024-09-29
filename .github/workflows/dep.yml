@@ -22,11 +22,11 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       # 3. Log in to Docker Hub
-      - name: Log in to Docker Hub
+      - name: Log in to Docker Hub  # Corrected indentation
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}  # Correct indentation
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Correct indentation
 
       # 4. Build and push Docker images
       - name: Build and Push Docker Images
@@ -34,7 +34,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker_app:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker_app:latest
 
       # 5. Deploy to Server via SSH
       - name: Deploy to Server
