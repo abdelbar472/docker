@@ -26,10 +26,15 @@ jobs:
       # 3. Deploy to Server via SSH using PowerShell
       - name: Deploy to Server
         run: |
+          $sshDir = "$env:USERPROFILE\\.ssh"
+          if (!(Test-Path -Path $sshDir)) {
+            New-Item -ItemType Directory -Force -Path $sshDir
+          }
+          
+          $keyFile = "$sshDir\\id_rsa"
           $privateKey = "${{ secrets.SSH_PRIVATE_KEY }}"
-          $keyFile = "$env:USERPROFILE\\.ssh\\id_rsa"
           $privateKey | Out-File -FilePath $keyFile -Force
-          chmod 600 $keyFile  # Set appropriate permissions
+          icacls $keyFile /inheritance:r /grant:r $env:USERNAME:F /c  # Set proper permissions
           
           ssh -i $keyFile -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             cd ${{ secrets.REMOTE_PATH }} &&
