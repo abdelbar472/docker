@@ -1,5 +1,4 @@
 name: Windows CI/CD Pipeline
-
 on:
   push:
     branches:
