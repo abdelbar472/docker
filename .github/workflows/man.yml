@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -33,5 +33,5 @@ jobs:
     - name: Save Docker Image to File
       run: |
         docker save ${{ secrets.DOCKER_USERNAME }}/my-image:latest -o image.tar
-        mkdir -p D:/docker-images
-        mv image.tar D:/docker-images
+        mkdir -p C:/docker-images
+        move image.tar C:/docker-images
