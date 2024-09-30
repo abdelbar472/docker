@@ -50,8 +50,6 @@ jobs:
       - name: Deploy to Server
         run: |
           # Verbose SSH output
-          ssh -v -i $keyFile -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-            cd ${{ secrets.REMOTE_PATH }} &&
-            git pull origin main
-          "
+          ssh -v -i $keyFile -o StrictHostKeyChecking=no "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" `
+          "cd ${{ secrets.REMOTE_PATH }} && git pull origin main"
         shell: powershell
