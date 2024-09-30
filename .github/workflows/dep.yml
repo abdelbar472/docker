@@ -34,7 +34,10 @@ jobs:
           $keyFile = "$sshDir\\id_rsa"
           $privateKey = "${{ secrets.SSH_PRIVATE_KEY }}"
           $privateKey | Out-File -FilePath $keyFile -Force
-          icacls $keyFile /inheritance:r /grant:r $env:USERNAME:F /c  # Set proper permissions
+
+          # Set permissions for the private key
+          icacls $keyFile /inheritance:r
+          icacls $keyFile /grant "$env:USERNAME":(R,W)  # Grant read and write permissions
           
           ssh -i $keyFile -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             cd ${{ secrets.REMOTE_PATH }} &&
