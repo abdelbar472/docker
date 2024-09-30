@@ -26,7 +26,7 @@ jobs:
       # 3. Test SSH Connectivity
       - name: Test SSH Connectivity
         run: |
-          Test-NetConnection -ComputerName ${{ secrets.SERVER_HOST }} -Port 22
+          Test-NetConnection -ComputerName ${{ secrets.SERVER_HOST }} -Port 5346
         shell: powershell
 
       # 4. Create SSH directory and add private key
