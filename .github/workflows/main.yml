@@ -36,13 +36,12 @@ jobs:
           if (!(Test-Path -Path $sshDir)) {
             New-Item -ItemType Directory -Force -Path $sshDir
           }
-          
+
           $keyFile = "$sshDir\id_rsa"
-          # Ensure private key content is handled as multi-line
-          $privateKey = @"
+          # Ensure private key content is handled as multi-line properly
+          @"
 ${{ secrets.SSH_PRIVATE_KEY }}
-"@
-          $privateKey | Out-File -FilePath $keyFile -Force -Encoding ascii
+"@ | Out-File -FilePath $keyFile -Force -Encoding ascii
           
           # Set correct permissions for the private key
           icacls $keyFile /inheritance:r
