@@ -23,8 +23,14 @@ jobs:
           Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
         shell: powershell
 
-      # 3. Deploy to Server via SSH using PowerShell
-      - name: Deploy to Server
+      # 3. Test SSH Connectivity
+      - name: Test SSH Connectivity
+        run: |
+          Test-NetConnection -ComputerName ${{ secrets.SERVER_HOST }} -Port 22
+        shell: powershell
+
+      # 4. Create SSH directory and add private key
+      - name: Set Up SSH Key
         run: |
           $sshDir = "$env:USERPROFILE\.ssh"
           if (!(Test-Path -Path $sshDir)) {
@@ -38,8 +44,13 @@ jobs:
           # Set permissions for the private key
           icacls $keyFile /inheritance:r
           icacls $keyFile /grant "${env:USERNAME}:(R,W)"  # Grant read and write permissions
-          
-          ssh -i $keyFile -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+        shell: powershell
+
+      # 5. Deploy to Server via SSH using PowerShell
+      - name: Deploy to Server
+        run: |
+          # Verbose SSH output
+          ssh -v -i $keyFile -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             cd ${{ secrets.REMOTE_PATH }} &&
             git pull origin main
           "
