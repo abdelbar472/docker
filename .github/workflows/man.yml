@@ -1,0 +1,35 @@
+name: Build, Push and Save Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/my-image:latest
+
+    - name: Save Docker Image to File
+      run: |
+        docker save ${{ secrets.DOCKER_USERNAME }}/my-image:latest -o image.tar
+        mkdir -p D:/docker-images
+        mv image.tar D:/docker-images
